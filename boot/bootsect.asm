@@ -30,7 +30,7 @@ CODE:
     mov bp, 0x1000
     mov sp, bp
 
-    print LOADING_BOOTLOADER
+    print LOADING_KERNEL
     read:
     mov bx, 0x1000
     mov es, bx
@@ -38,16 +38,18 @@ CODE:
     mov dh, 0x80 ; NOTE - when  running from bochs this has to be 72
     call disk_load
 
-    print ENTERING_BOOTLOADER
+    print ENTERING_KERNEL
     enter:
-    jmp 0x1000:0
+    mov bx, 0x1000 ; data seg should point to the right place
+    mov ds, bx
+    jmp 0x1000:0 ; jumps to code in kernel_entry.asm
     %include "print.asm"
     %include "disk.asm"
 
 DATA:
     STARTING: db "Starting",0
-    SETTING_STACK: db "Setting up stack",0
-    LOADING_BOOTLOADER: db "Loading Bootloader",0
-    ENTERING_BOOTLOADER: db "Entering Bootloader",0
+    SETTING_STACK: db "Setting up stack | 9000h:1000h",0
+    LOADING_KERNEL: db "Loading Kernel | 1000h:0",0
+    ENTERING_KERNEL: db "Entering Kernel| jmp 1000h:0",0
     times 510-($-$$) db 0
     dw 0xaa55

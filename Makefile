@@ -6,7 +6,7 @@ INCLUDES = ${wildcard */includes/}
 os-image: boot/bootsect.bin kernel.bin
 	cat $^ > os-image
 
-kernel.bin: boot/main.o ${O}
+kernel.bin: boot/kernel_entry.o ${O}
 	ld -m elf_i386 -Ttext 0 -o $@ $^ --oformat binary
 
 %.o: %.asm
@@ -24,7 +24,7 @@ run: os-image
 
 clean:
 	rm -rf *.bin *.dis *.o os-image *.elf
-	rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o cpu/*.o libc/*.o
+	rm -rf boot/*.o boot/*.bin real/*.o real/*.bin
 
 rerun:
 	make clean
