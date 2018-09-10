@@ -11,20 +11,15 @@
 //                    By Jonathan Banin
 // =========================================================
 // GDT - Stores the segments of protected mode
-void print_nl(){
-    __asm__ __volatile__ ("mov $0xe0a, %ax \n\t int $0x10 \n\t mov $0xe0d, %ax \n\t int $0x10");
-}
+#include "printing.h"
+#include "gdt.h"
 
-void print(const char *s){
-    while(*s){
-        __asm__ __volatile__("int  $0x10" : : "a"(0x0E00 | *s), "b"(7));
-        s++;
-    }
-    print_nl();
-}
 void main(){
     int i = 0;
     print("SUCCESS");
-    print("s");
+    print("Welcome to TantOS");
+    print("Setting GDT");
+
+    init_gdt();
     while(1);
 }
