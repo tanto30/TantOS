@@ -29,8 +29,6 @@ disk_load:
 
 disk_error:
     print DISK_ERROR
-    mov dh, ah ; ah = error code, dl = disk drive that dropped the error
-    call print_hex ; check out the code at http://stanislavs.org/helppc/int_13-1.html
     jmp disk_loop
 
 sectors_error:

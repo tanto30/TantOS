@@ -10,47 +10,55 @@
 ; =========================================================
 ;                    By Jonathan Banin
 ; =========================================================
+;DEFINITIONS:
+    [bits 16]
 
-[org 0x7c00]
-[bits 16]
+    STACK_SEGMENT equ 0x9000
+    STACK_OFFSET equ 0x1000
 
-%macro print 1
-    mov si, %1
-    call print_str
-%endmacro
+    BOOTLOADER_SEGMENT equ 0x7c0
+    BOOTLOADER_OFFSET equ 0x200
 
-CODE:
+    %macro print 1
+        mov si, %1
+        call print_str
+    %endmacro
+
+;CODE:
+    mov bx, 0x7c0
+    mov ds, bx
     print STARTING
-    start:
 
     print SETTING_STACK
     setup_stack:
-    mov bp, 0x9000
+    mov bp, STACK_SEGMENT
     mov ss, bp
-    mov bp, 0x1000
+    mov bp, STACK_OFFSET
     mov sp, bp
 
     print LOADING_BOOTLOADER
     read:
-    mov bx, 0x1000
+    mov bx, BOOTLOADER_SEGMENT
     mov es, bx
-    xor bx, bx
-    mov dh, 0x80 ; NOTE - when  running from bochs this has to be 72
+    mov bx, BOOTLOADER_OFFSET
+    mov dh, 50
     call disk_load
 
     print ENTERING_BOOTLOADER
     enter:
-    mov bx, 0x1000 ; data seg should point to the right place
+    mov bx, BOOTLOADER_SEGMENT
     mov ds, bx
-    jmp 0x1000:0 ; jumps to code in kernel_entry.asm
+    jmp BOOTLOADER_SEGMENT:BOOTLOADER_OFFSET
 
     %include "print.asm"
     %include "disk.asm"
 
-DATA:
+;DATA:
     STARTING: db "Starting",0
-    SETTING_STACK: db "Setting up stack | 9000h:1000h",0
-    LOADING_KERNEL: db "Loading Bootloader | 1000h:0",0
+    SETTING_STACK: db "Setting up stack | 91000h",0
+    LOADING_BOOTLOADER: db "Loading Bootloader | 10000h",0
     ENTERING_BOOTLOADER: db "Entering Bootloader| jmp 1000h:0",0
     times 510-($-$$) db 0
     dw 0xaa55
+
+    %include "main.asm"

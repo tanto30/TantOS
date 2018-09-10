@@ -1,2 +1,2 @@
-floppy: 1_44=os-image, status=inserted
+floppy: 1_44=bootloader/bootsect, status=inserted
 boot: a
