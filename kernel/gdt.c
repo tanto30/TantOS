@@ -3,7 +3,7 @@
 //
 
 #include "gdt.h"
-
+#include "printing.h"
 struct gdt_entry gdt_entries[5];
 struct gdt_ptr gdt_ptr_pointer;
 #define LIMIT_MAX 0xffffffff
@@ -18,32 +18,34 @@ void gdt_set(signed int index, unsigned int base, unsigned int limit, unsigned c
 }
 
 void init_gdt() {
-    gdt_ptr_pointer.limit = (sizeof(gdt_entries[0]) * 5) - 1;
+    gdt_ptr_pointer.limit = (sizeof(gdt_entries)) - 1;
     gdt_ptr_pointer.base = (unsigned int) gdt_entries;
 
     gdt_set(0, 0, 0, 0, 0);
-    gdt_set(1, 0, LIMIT_MAX, 0x9a, 0xc0);
-    gdt_set(2, 0, LIMIT_MAX, 0x92, 0xc0);
-    gdt_set(3, 0, LIMIT_MAX, 0xfa, 0xc0);
-    gdt_set(4, 0, LIMIT_MAX, 0xf2, 0xc0);
+    gdt_set(1, 0, LIMIT_MAX, 0x9a, 0xcf);
+    gdt_set(2, 0, LIMIT_MAX, 0x92, 0xcf);
+    gdt_set(3, 0, LIMIT_MAX, 0xfa, 0xcf);
+    gdt_set(4, 0, LIMIT_MAX, 0xf2, 0xcf);
 
     __asm__ __volatile__ (
-    "lgdt (%%ax) \n\t"
-    "mov %%cr0, %%ax \n\t"
-    "or $0x1, %%ax \n\t"
-    "mov %%ax, %%cr0 \n\t"
-    "mov $0x10, %%ax \n\t"
-    "mov %%ax, %%ds \n\t"
-    "mov %%ax, %%es \n\t"
-    "mov %%ax, %%fs \n\t"
-    "mov %%ax, %%gs \n\t"
-    "mov %%ax, %%ss \n\t"
-    "jmp $0x08:$flush\n\t"
-    "flush: ret"
+    "lgdt %0 \n\t"
+    "mov %%cr0, %%eax \n\t"
+    "or $0x1, %%eax \n\t"
+    "mov %%eax, %%cr0 \n\t"
+    "mov $0x10, %%eax \n\t"
+    "mov %%eax, %%ds \n\t"
+    "mov %%eax, %%es \n\t"
+    "mov %%eax, %%fs \n\t"
+    "mov %%eax, %%gs \n\t"
+    "mov %%eax, %%ss \n\t"
+    "jmp $0x08, $flush \n\t"
+    ".code32 \n\t"
+    "flush:"
     :
-    :
+    : "m"(gdt_ptr_pointer)
     : "ax"
     );
+    print("SUCCESS");
 }
 
 

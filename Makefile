@@ -24,7 +24,7 @@ run: os-image
 
 clean:
 	rm -rf *.bin *.dis *.o os-image *.elf
-	rm -rf boot/*.o boot/*.bin real/*.o real/*.bin
+	rm -rf */*.o */*.bin
 
 rerun:
 	make clean

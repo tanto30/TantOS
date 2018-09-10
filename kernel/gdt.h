@@ -17,7 +17,7 @@ typedef struct gdt_entry {
 typedef struct gdt_ptr {
     unsigned short limit;
     unsigned int base;
-};
+}__attribute__((packed));
 
 void init_gdt();
 
