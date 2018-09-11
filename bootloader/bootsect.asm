@@ -12,6 +12,7 @@
 ; =========================================================
 ;DEFINITIONS:
     [bits 16]
+    BOOTSECT_SEGMENT equ 0x7c0
 
     STACK_SEGMENT equ 0x9000
     STACK_OFFSET equ 0x1000
@@ -19,24 +20,25 @@
     BOOTLOADER_SEGMENT equ 0x7c0
     BOOTLOADER_OFFSET equ 0x200
 
-    %macro print 1
+    %macro print_nl 1
         mov si, %1
-        call print_str
+        call print_
+        call line_down_
     %endmacro
 
 ;CODE:
-    mov bx, 0x7c0
+    mov bx, BOOTSECT_SEGMENT
     mov ds, bx
-    print STARTING
+    print_nl STARTING
 
-    print SETTING_STACK
+    print_nl SETTING_STACK
     setup_stack:
     mov bp, STACK_SEGMENT
     mov ss, bp
     mov bp, STACK_OFFSET
     mov sp, bp
 
-    print LOADING_BOOTLOADER
+    print_nl LOADING_BOOTLOADER
     read:
     mov bx, BOOTLOADER_SEGMENT
     mov es, bx
@@ -44,11 +46,11 @@
     mov dh, 50
     call disk_load
 
-    print ENTERING_BOOTLOADER
+    print_nl ENTERING_BOOTLOADER
     enter:
     mov bx, BOOTLOADER_SEGMENT
     mov ds, bx
-    jmp BOOTLOADER_SEGMENT:BOOTLOADER_OFFSET
+    jmp BOOTLOADER_SEGMENT:main
 
     %include "print.asm"
     %include "disk.asm"

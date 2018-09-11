@@ -1,2 +1,2 @@
-floppy: 1_44=bootloader/bootsect, status=inserted
+floppy a: 1_44=bootloader/bootsect, status=inserted
 boot: a

@@ -28,11 +28,11 @@ disk_load:
 
 
 disk_error:
-    print DISK_ERROR
+    print_nl DISK_ERROR
     jmp disk_loop
 
 sectors_error:
-    print SECTORS_ERROR
+    print_nl SECTORS_ERROR
 
 disk_loop:
     jmp $
