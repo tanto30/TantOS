@@ -3,11 +3,11 @@ H = ${wildcard */*.h}
 O = ${C:.c=.o}
 INCLUDES = ${wildcard */includes/}
 
-os-image: boot/bootsect.bin kernel.bin
+os-image: bootloader/bootsect.bin kernel.bin
 	cat $^ > os-image
 
-kernel.bin: boot/kernel_entry.o ${O}
-	ld -m elf_i386 -Ttext 0 -o $@ $^ --oformat binary
+kernel.bin: kernel/kernel_entry.o ${O}
+	ld -m elf_i386 -Ttext 0x200 -o $@ $^ --oformat binary
 
 %.o: %.asm
 	nasm -f aout $< -o $@

@@ -12,12 +12,12 @@ typedef struct gdt_entry {
     unsigned char access;
     unsigned char granularity;
     unsigned char base_high;
-}__attribute__((packed));
+}__attribute__((packed)) gdt_entry;
 
 typedef struct gdt_ptr {
     unsigned short limit;
     unsigned int base;
-}__attribute__((packed));
+}__attribute__((packed)) gdt_ptr;
 
 void init_gdt();
 
