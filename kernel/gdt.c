@@ -2,8 +2,8 @@
 // Created by tanto on 9/10/2018.
 //
 
-#include "kernel/gdt.h"
-#include "kernel/printing.h"
+#include "gdt.h"
+#include "printing.h"
 struct gdt_entry gdt_entries[5];
 struct gdt_ptr gdt_ptr_pointer;
 #define LIMIT_MAX 0xffffffff
