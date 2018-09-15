@@ -1,7 +1,13 @@
-C = ${wildcard */*.c}
-H = ${wildcard */*.h}
-O = ${C:.c=.o}
+C := ${wildcard */*.c}
+H := ${wildcard */*.h}
+O := ${C:.c=.o}
 INCLUDES = ${wildcard */includes/}
+
+WARNINGS := -Wall -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align \
+            -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations \
+            -Wredundant-decls -Wnested-externs -Winline -Wno-long-long \
+            -Wconversion -Wstrict-prototypes
+GCC_FLAGS := -m16 -ffreestanding $(WARNINGS)
 
 os-image: bootloader/bootsect.bin kernel.bin
 	cat $^ > os-image
@@ -13,7 +19,7 @@ kernel.bin: kernel/kernel_entry.o ${O}
 	nasm -f aout $< -o $@
 
 %.o: %.c
-	gcc -m16 -ffreestanding -c $< -o $@ -fno-pie
+	gcc ${GCC_FLAGS} -c $< -o $@ -fno-pie
 
 %.bin: %.asm
 	nasm $< -f bin -o $@ -I ${INCLUDES}

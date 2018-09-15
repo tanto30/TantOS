@@ -4,7 +4,7 @@
 
 #include "printing.h"
 
-void print_nl(){
+void print_nl(void){
     __asm__ __volatile__ ("mov $0xe0a, %ax \n\t int $0x10 \n\t mov $0xe0d, %ax \n\t int $0x10");
 }
 

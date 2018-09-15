@@ -17,9 +17,9 @@ void gdt_set(signed int index, unsigned int base, unsigned int limit, unsigned c
     gdt_entries[index].access = access;
 }
 
-void init_gdt() {
-    gdt_ptr_pointer.limit = (sizeof(gdt_entries)) - 1;
-    gdt_ptr_pointer.base = (unsigned int) gdt_entries;
+void init_gdt(void) {
+    gdt_ptr_pointer.limit = sizeof(gdt_entry) * 5 - 1;
+    gdt_ptr_pointer.base = (unsigned long) &gdt_entries;
 
     gdt_set(0, 0, 0, 0, 0);
     gdt_set(1, 0, LIMIT_MAX, 0x9a, 0xcf);
@@ -27,24 +27,8 @@ void init_gdt() {
     gdt_set(3, 0, LIMIT_MAX, 0xfa, 0xcf);
     gdt_set(4, 0, LIMIT_MAX, 0xf2, 0xcf);
 
-    __asm__ __volatile__ (
-    "lgdt %0 \n\t"
-    "mov %%cr0, %%eax \n\t"
-    "or $0x1, %%eax \n\t"
-    "mov %%eax, %%cr0 \n\t"
-    "mov $0x10, %%eax \n\t"
-    "mov %%eax, %%ds \n\t"
-    "mov %%eax, %%es \n\t"
-    "mov %%eax, %%fs \n\t"
-    "mov %%eax, %%gs \n\t"
-    "mov %%eax, %%ss \n\t"
-    "jmp $0x08, $flush \n\t"
-    ".code32 \n\t"
-    "flush:"
-    :
-    : "m"(gdt_ptr_pointer)
-    : "ax"
-    );
+    //gdt_flush((unsigned long)&gdt_ptr_pointer);
+
     print("SUCCESS");
 }
 

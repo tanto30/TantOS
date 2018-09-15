@@ -19,6 +19,6 @@ typedef struct gdt_ptr {
     unsigned int base;
 }__attribute__((packed)) gdt_ptr;
 
-void init_gdt();
-
+void init_gdt(void);
+void gdt_set(signed int index, unsigned int base, unsigned int limit, unsigned char access, unsigned char gran);
 #endif //OS2_GDT_H
