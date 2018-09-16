@@ -38,7 +38,10 @@
     enter:
     mov bx, BOOTLOADER_SEGMENT
     mov ds, bx
-    jmp BOOTLOADER_SEGMENT:BOOTLOADER_OFFSET
+    ; For entering main.asm:main
+    call BOOTLOADER_SEGMENT:main
+    ; For entering kernel.c
+    ; jmp BOOTLOADER_SEGMENT:BOOTLOADER_OFFSET
 
     %include "print.asm"
     %include "disk.asm"
@@ -50,3 +53,5 @@
     ENTERING_BOOTLOADER: db "Entering Bootloader| jmp 1000h:0",0
     times 510-($-$$) db 0
     dw 0xaa55
+
+    %include "main.asm"

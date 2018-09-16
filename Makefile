@@ -9,7 +9,7 @@ WARNINGS := -Wall -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align \
             -Wconversion -Wstrict-prototypes
 GCC_FLAGS := -m16 -ffreestanding $(WARNINGS)
 
-os-image: bootloader/bootsect.bin kernel.bin
+os-image: bootloader/bootsect.bin
 	cat $^ > os-image
 
 kernel.bin: kernel/kernel_entry.o ${O}
@@ -22,7 +22,7 @@ kernel.bin: kernel/kernel_entry.o ${O}
 	gcc ${GCC_FLAGS} -c $< -o $@ -fno-pie
 
 %.bin: %.asm
-	nasm $< -f bin -o $@ -I ${INCLUDES}
+	nasm $< -f bin -o $@ -I ${INCLUDES} -I bootloader/
 
 
 run: os-image
