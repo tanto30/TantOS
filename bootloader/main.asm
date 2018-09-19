@@ -46,10 +46,10 @@
 	print R_CS
 	mov bx, cs
 	hex_down
-	pop bx
 	print R_DS
 	mov bx, ds
 	hex_down
+	pop bx
 
 	print_nl SETTING_GDT
 	setup_gdt:
@@ -62,25 +62,6 @@
 
 	jmp $
 	%include "gdt.asm"
-
-;==============
-;= CODE 32bit =
-;==============
-    [bits 32]
-	PM:
-		mov ax, DATA_SEG
-		mov ds, ax
-		mov ss, ax
-		mov es, ax
-		mov gs, ax
-		mov fs, ax
-		mov ebp, 0x90000
-		mov esp, ebp
-		mov ebx, SUCCESSFUL32
-		call print_string_pm
-		jmp $
-		%include "print32.asm"
-
 
 ;========
 ;= DATA =
@@ -97,4 +78,20 @@
 	reg "CS"
 	reg "SS"
 
-
+;==============
+;= CODE 32bit =
+;==============
+    [bits 32]
+	PM:
+	mov ax, DATA_SEG
+	mov ds, ax
+	mov ss, ax
+	mov es, ax
+	mov gs, ax
+	mov fs, ax
+	mov ebp, 0x90000
+	mov esp, ebp
+	mov ebx, SUCCESSFUL32
+	call print_string_pm
+	jmp $
+	%include "print32.asm"
