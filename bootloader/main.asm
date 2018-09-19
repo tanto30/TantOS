@@ -7,6 +7,12 @@
         call print_hex
         call line_down_
    %endmacro
+   %macro reg 1
+        %strcat label "R_", %1, ": "
+        %deftok label label
+        %strcat value %1, ": "
+        label db value,0
+   %endmacro
    %include "utils.asm"
 ;CODE:
     main:
@@ -36,19 +42,44 @@
         mov bx, cs
         hex_down
         pop bx
+        print R_DS
+        mov bx, ds
+        hex_down
 
     print_nl SETTING_GDT
     setup_gdt:
-
+        cli
+        lgdt [gdt_descriptor]
+        mov eax, cr0
+        or eax, 0x1
+        mov cr0, eax
+        jmp CODE_SEG:PM
     jmp $
-
+    %include "gdt.asm"
+[bits 32]
+    PM:
+        mov ax, DATA_SEG
+        mov ds, ax
+        mov ss, ax
+        mov es, ax
+        mov gs, ax
+        mov fs, ax
+        mov ebp, 0x90000
+        mov esp, ebp
+        mov ebx, SUCCESSFUL32
+        call print_string_pm
+        jmp $
+        %include "print32.asm"
+        SUCCESSFUL32: db "Successful 32 mode!",0
+[bits 16]
 ;DATA:
     SUCCESSFUL: db "Successfully entered bootloader",0
     PRINTING_REGISTERS: db "PRINTING REGISTERS:",0
     SETTING_GDT: db "Setting GDT",0
-    R_AX: db "AX: ",0
-    R_BX: db "BX: ",0
-    R_CX: db "CX: ",0
-    R_DX: db "DX: ",0
-    R_SS: db "SS: ",0
-    R_CS: db "CS: ",0
+    reg "AX"
+    reg "BX"
+    reg "CX"
+    reg "DX"
+    reg "DS"
+    reg "CS"
+    reg "SS"

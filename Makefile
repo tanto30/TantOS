@@ -4,9 +4,9 @@ O := ${C:.c=.o}
 INCLUDES = ${wildcard */includes/}
 
 WARNINGS := -Wall -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align \
-            -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations \
-            -Wredundant-decls -Wnested-externs -Winline -Wno-long-long \
-            -Wconversion -Wstrict-prototypes
+			-Wwrite-strings -Wmissing-prototypes -Wmissing-declarations \
+			-Wredundant-decls -Wnested-externs -Winline -Wno-long-long \
+			-Wconversion -Wstrict-prototypes
 GCC_FLAGS := -m16 -ffreestanding $(WARNINGS)
 
 os-image: bootloader/bootsect.bin

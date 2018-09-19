@@ -1,12 +1,13 @@
 ;DEFINITIONS:
     [bits 16]
-    BOOTSECT_SEGMENT equ 0x7c0
+    [org 0x7c00]
+    BOOTSECT_SEGMENT equ 0x0
 
     STACK_SEGMENT equ 0x9000
     STACK_OFFSET equ 0x1000
 
-    BOOTLOADER_SEGMENT equ 0x7c0
-    BOOTLOADER_OFFSET equ 0x200
+    BOOTLOADER_SEGMENT equ 0x0
+    BOOTLOADER_OFFSET equ 0x7e00
 
     %macro print_nl 1
         mov si, %1
