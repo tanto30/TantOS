@@ -3,7 +3,6 @@
 //
 
 #include "gdt.h"
-#include "printing.h"
 struct gdt_entry gdt_entries[5];
 struct gdt_ptr gdt_ptr_pointer;
 #define LIMIT_MAX 0xffffffff
@@ -29,7 +28,7 @@ void init_gdt(void) {
 
     //gdt_flush((unsigned long)&gdt_ptr_pointer);
 
-    print("SUCCESS");
+    //print("SUCCESS");
 }
 
 
