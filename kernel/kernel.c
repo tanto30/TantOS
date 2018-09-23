@@ -1,14 +1,9 @@
-// GDT - Stores the segments of protected mode
+//
+// Created by tanto on 9/23/2018.
+//
 
+#include "kernel.h"
 
-#include "screen.h"
-
-void main(){
-    clear_screen();
-    kprint("SUCCESS");
-    kprint("Welcome to TantOS");
-    kprint("Setting GDT");
-
-    //init_gdt();
+void main(void){
     while(1);
 }
