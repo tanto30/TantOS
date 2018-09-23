@@ -4,6 +4,7 @@
 
 #include "kernel.h"
 
-void main(void){
+void kernel_main(void);
+void kernel_main(void){
     while(1);
 }

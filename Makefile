@@ -1,5 +1,5 @@
-C := ${wildcard */*.c}
-H := ${wildcard */*.h}
+C := ${wildcard kernel/*.c kernel/modules/*.c}
+H := ${wildcard kernel/*.h kernel/modules/*.h}
 O := ${C:.c=.o}
 INCLUDES = ${wildcard */includes/}
 
@@ -13,7 +13,7 @@ os-image: bootloader/bootsect.bin kernel.bin
 	cat $^ > os-image
 
 kernel.bin: kernel/kernel_entry.o ${O}
-	ld -m elf_i386 -Ttext 0x7F8C -o $@ $^ --oformat binary
+	ld -m elf_i386 -o $@ $^ --oformat binary
 
 %.o: %.asm
 	nasm -f aout $< -o $@
@@ -30,7 +30,7 @@ run: os-image
 
 clean:
 	rm -rf *.bin *.dis *.o os-image *.elf
-	rm -rf */*.o */*.bin
+	rm -rf */*.o */*.bin */*/*.o
 
 rerun:
 	make clean
