@@ -13,7 +13,7 @@ os-image: bootloader/bootsect.bin kernel.bin
 	cat $^ > os-image
 
 kernel.bin: kernel/kernel_entry.o ${O}
-	ld -m elf_i386 -o $@ $^ --oformat binary
+	ld -m elf_i386 -Ttext 0x7f8c -o $@ $^ --oformat binary
 
 %.o: %.asm
 	nasm -f aout $< -o $@
